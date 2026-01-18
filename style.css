@@ -1,0 +1,133 @@
+
+        /* --- CSS: ESTILO DO SISTEMA --- */
+        :root { --bg: #0f0f0f; --card: #1a1a1a; --text: #e0e0e0; --win: #2e7d32; --loss: #c62828; --neutral: #424242; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+        
+.header { 
+    display: flex; 
+    justify-content: center; 
+    gap: 10px; 
+    padding: 10px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+}
+
+.ativo-group {
+    display: flex;
+    background: #252525;
+    border-radius: 8px;
+    border: 1px solid #444;
+}
+
+.ativo-group select { border: none; }
+
+.btn-icon {
+    background: transparent;
+    border: none;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+input[type="text"].dinheiro-positivo { color: #00ff00; }
+input[type="text"].dinheiro-negativo { color: #ff5555; }
+        select, button { padding: 10px; border-radius: 8px; background: #252525; color: white; border: 1px solid #444; cursor: pointer; }
+        button.primary { background: #e91e63; border: none; font-weight: bold; }
+        button.danger { background: #441111; color: #ff5555; border: 1px solid #662222; }
+
+        .year-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 1400px; margin: 0 auto; }
+        .month-card { background: var(--card); padding: 12px; border-radius: 12px; border: 1px solid #333; }
+        .month-name { font-weight: bold; color: #888; text-transform: uppercase; font-size: 12px; margin-bottom: 10px; text-align: center; }
+        
+       /* Cabeçalho dos dias (D S T Q Q S S) */
+.days-header { 
+    display: grid; 
+    grid-template-columns: repeat(7, 1fr); 
+    text-align: center;
+    font-size: 10px; 
+    color: #666; 
+    margin-bottom: 8px; 
+    font-weight: bold;
+}
+
+/* Grade dos dias */
+.days-grid { 
+    display: grid; 
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 5px; 
+}
+
+/* Ajuste do tamanho do dia para não deformar a grade */
+.day { 
+    aspect-ratio: 1/1; 
+    background: #252525; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    border-radius: 4px; 
+    font-size: 11px; 
+    box-sizing: border-box;
+}
+        
+        .day.empty { background: transparent; cursor: default; }
+        
+        /* Cores Dinâmicas */
+        .day.gain { background: var(--win) !important; color: white; }
+        .day.loss { background: var(--loss) !important; color: white; }
+        .day.zero { background: var(--neutral) !important; color: white; }
+
+        /* MODAIS */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { background: #222; padding: 20px; border-radius: 15px; width: 90%; max-width: 350px; border: 1px solid #444; }
+        label { display: block; font-size: 11px; color: #ff4081; margin-bottom: 5px; font-weight: bold; text-align: left; }
+        input, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #444; background: #111; color: white; box-sizing: border-box; }
+        .modal-buttons { display: flex; flex-direction: column; gap: 8px; }
+        .row-btns { display: flex; gap: 8px; }
+        .row-btns button { flex: 1; }
+		
+
+/* Se não tiver observação, não mostra o balão */
+.day[data-obs=""]::after { display: none; }
+/* Estilo do Balãozinho Bonitinho */
+.tooltip {
+    position: absolute;
+    background: #222;
+    border: 1px solid #ff4081;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 12px;
+    color: white;
+    z-index: 2000;
+    pointer-events: none;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    text-align: left;
+    min-width: 150px;
+    line-height: 1.5;
+}
+
+.tooltip-header {
+    border-bottom: 1px solid #444;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    color: #ff4081;
+    display: flex;
+    justify-content: space-between;
+}
+@media (max-width: 900px) {
+    .year-container {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .day {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 600px) {
+    .year-container {
+        grid-template-columns: 1fr;
+    }
+}

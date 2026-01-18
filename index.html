@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Meu Diário de Trade</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="header">
+        <select id="selectYear"></select>
+        <div class="ativo-group">
+            <select id="selectAtivo"></select>
+            <button onclick="apagarAtivoAtual()" title="Apagar Ativo">🗑️</button>
+        </div>
+        <button onclick="abrirModalAtivo()" class="primary">+ Ativo</button>
+    </div>
+
+    <div id="status">Sincronizando...</div>
+    <div class="year-container" id="yearContainer"></div>
+
+    <div id="modalReplay" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Dia 00/00/0000</h3>
+            
+            <label>VALOR DO DIA (R$):</label>
+            <input type="text" id="modalValor" placeholder="Ex: 1.500,00 ou -150,00">
+            
+            <label>ANOTAÇÕES:</label>
+            <textarea id="modalObs" rows="5" placeholder="O que aconteceu hoje?"></textarea>
+            
+            <div class="modal-buttons">
+                <button class="primary" onclick="confirmarSalvar()">SALVAR</button>
+                <div class="row-btns">
+                    <button id="btnExcluir" class="danger" onclick="confirmarExcluir()">EXCLUIR</button>
+                    <button onclick="fecharModais()">SAIR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalNovoAtivo" class="modal">
+        <div class="modal-content">
+            <h3>Novo Ativo</h3>
+            <label>CÓDIGO (WIN, WDO...):</label>
+            <input type="text" id="nomeNovoAtivo">
+            <div class="row-btns">
+                <button class="primary" onclick="salvarNovoAtivo()">CADASTRAR</button>
+                <button onclick="fecharModais()">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
