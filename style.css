@@ -146,6 +146,41 @@ input[type="text"].dinheiro-negativo { color: #ff5555; }
     margin-top: 0;
 }
 
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: var(--card);
+    padding: 15px 25px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    text-align: center;
+    min-width: 120px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.gain-color { color: #00ff00; }
+.loss-color { color: #ff5555; }
+.gain-border { border-bottom: 3px solid var(--win); }
+.loss-border { border-bottom: 3px solid var(--loss); }
+
 @media (max-width: 600px) {
     .year-container {
         grid-template-columns: 1fr;

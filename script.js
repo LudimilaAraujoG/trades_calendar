@@ -29,6 +29,7 @@ async function carregarTudo() {
 }
 
 function renderizarAno() {
+    atualizarEstatisticas(); // <--- Adicione esta linha aqui
     const container = document.getElementById('yearContainer');
     container.innerHTML = "";
     const ano = parseInt(selYear.value);
@@ -191,6 +192,22 @@ async function apagarAtivoAtual() {
         await _supabase.from('ativos_cadastrados').delete().match({ nome: selAtivo.value });
         carregarTudo();
     }
+}
+
+function atualizarEstatisticas() {
+    const ativoFiltro = selAtivo.value;
+    
+    // Filtra os replays apenas do ativo selecionado
+    const replaysDoAtivo = dataSalva.filter(r => r.ativo === ativoFiltro);
+    
+    const total = replaysDoAtivo.length;
+    const gains = replaysDoAtivo.filter(r => parseFloat(r.valor) > 0).length;
+    const loss = replaysDoAtivo.filter(r => parseFloat(r.valor) < 0).length;
+
+    // Atualiza os valores na tela
+    document.getElementById('statTotal').innerText = total;
+    document.getElementById('statGains').innerText = gains;
+    document.getElementById('statLoss').innerText = loss;
 }
 
 // Cor do input dinâmica
