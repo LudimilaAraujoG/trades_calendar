@@ -122,7 +122,7 @@ function mostrarTooltip(e, data, valor, obs) {
             <span>${emoji}</span>
         </div>
         <strong>Valor:</strong> <span style="color:${cor}">R$ ${valor.toLocaleString('pt-BR')}</span><br>
-        <small>${obs || 'Sem notas'}</small>
+        <strong>Observação:</strong> ${obs || 'Sem notas'}
     `;
     document.body.appendChild(tooltip);
     moverTooltip(e);
