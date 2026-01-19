@@ -154,13 +154,38 @@ input[type="text"].dinheiro-negativo { color: #ff5555; }
     flex-wrap: wrap;
 }
 
+.stats-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.stats-group {
+    text-align: center;
+}
+
+.stats-group h4 {
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stats-container {
+    display: flex;
+    gap: 10px;
+}
+
+/* Ajuste fino para os cards menores nas estatísticas duplas */
 .stat-card {
     background: var(--card);
-    padding: 15px 25px;
-    border-radius: 12px;
+    padding: 10px 15px;
+    border-radius: 8px;
     border: 1px solid #333;
-    text-align: center;
-    min-width: 120px;
+    min-width: 80px;
 }
 
 .stat-label {

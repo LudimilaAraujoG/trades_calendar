@@ -196,18 +196,24 @@ async function apagarAtivoAtual() {
 
 function atualizarEstatisticas() {
     const ativoFiltro = selAtivo.value;
-    
-    // Filtra os replays apenas do ativo selecionado
-    const replaysDoAtivo = dataSalva.filter(r => r.ativo === ativoFiltro);
-    
-    const total = replaysDoAtivo.length;
-    const gains = replaysDoAtivo.filter(r => parseFloat(r.valor) > 0).length;
-    const loss = replaysDoAtivo.filter(r => parseFloat(r.valor) < 0).length;
+    const anoSelecionado = selYear.value;
 
-    // Atualiza os valores na tela
-    document.getElementById('statTotal').innerText = total;
-    document.getElementById('statGains').innerText = gains;
-    document.getElementById('statLoss').innerText = loss;
+    // 1. Filtrar todos os replays desse ativo (Independente do ano)
+    const todosDoAtivo = dataSalva.filter(r => r.ativo === ativoFiltro);
+    
+    // 2. Filtrar apenas os replays deste ativo E do ano selecionado
+    const doAno = todosDoAtivo.filter(r => r.data.startsWith(anoSelecionado));
+
+    // Atualizar labels e valores do ANO
+    document.getElementById('labelAno').innerText = `Resumo de ${anoSelecionado}`;
+    document.getElementById('anoTotal').innerText = doAno.length;
+    document.getElementById('anoGains').innerText = doAno.filter(r => parseFloat(r.valor) > 0).length;
+    document.getElementById('anoLoss').innerText = doAno.filter(r => parseFloat(r.valor) < 0).length;
+
+    // Atualizar valores do TOTAL HISTÓRICO
+    document.getElementById('totalGeral').innerText = todosDoAtivo.length;
+    document.getElementById('totalGains').innerText = todosDoAtivo.filter(r => parseFloat(r.valor) > 0).length;
+    document.getElementById('totalLoss').innerText = todosDoAtivo.filter(r => parseFloat(r.valor) < 0).length;
 }
 
 // Cor do input dinâmica
