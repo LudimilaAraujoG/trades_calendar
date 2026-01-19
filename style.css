@@ -206,6 +206,14 @@ input[type="text"].dinheiro-negativo { color: #ff5555; }
 .gain-border { border-bottom: 3px solid var(--win); }
 .loss-border { border-bottom: 3px solid var(--loss); }
 
+.assertive-border { border-bottom: 3px solid #7b1fa2; } /* Roxo para técnica */
+
+/* Ajuste para caber 4 cards no tablet sem quebrar muito a linha */
+.stat-card {
+    min-width: 90px;
+    flex: 1; /* Faz os cards crescerem por igual */
+}
+
 @media (max-width: 600px) {
     .year-container {
         grid-template-columns: 1fr;

@@ -198,22 +198,37 @@ function atualizarEstatisticas() {
     const ativoFiltro = selAtivo.value;
     const anoSelecionado = selYear.value;
 
-    // 1. Filtrar todos os replays desse ativo (Independente do ano)
+    if (!document.getElementById('anoTotal')) return;
+
     const todosDoAtivo = dataSalva.filter(r => r.ativo === ativoFiltro);
-    
-    // 2. Filtrar apenas os replays deste ativo E do ano selecionado
     const doAno = todosDoAtivo.filter(r => r.data.startsWith(anoSelecionado));
 
-    // Atualizar labels e valores do ANO
-    document.getElementById('labelAno').innerText = `Resumo de ${anoSelecionado}`;
-    document.getElementById('anoTotal').innerText = doAno.length;
-    document.getElementById('anoGains').innerText = doAno.filter(r => parseFloat(r.valor) > 0).length;
-    document.getElementById('anoLoss').innerText = doAno.filter(r => parseFloat(r.valor) < 0).length;
+    // Cálculos para o Ano
+    const totalAno = doAno.length;
+    const gainsAno = doAno.filter(r => parseFloat(r.valor) > 0).length;
+    const lossAno = doAno.filter(r => parseFloat(r.valor) < 0).length;
+    // Cálculo da Taxa do Ano (evita divisão por zero com o '|| 0')
+    const taxaAno = totalAno > 0 ? ((gainsAno / totalAno) * 100).toFixed(1) : 0;
 
-    // Atualizar valores do TOTAL HISTÓRICO
-    document.getElementById('totalGeral').innerText = todosDoAtivo.length;
-    document.getElementById('totalGains').innerText = todosDoAtivo.filter(r => parseFloat(r.valor) > 0).length;
-    document.getElementById('totalLoss').innerText = todosDoAtivo.filter(r => parseFloat(r.valor) < 0).length;
+    // Cálculos para o Total
+    const totalGeral = todosDoAtivo.length;
+    const gainsGeral = todosDoAtivo.filter(r => parseFloat(r.valor) > 0).length;
+    const lossGeral = todosDoAtivo.filter(r => parseFloat(r.valor) < 0).length;
+    // Cálculo da Taxa Total
+    const taxaGeral = totalGeral > 0 ? ((gainsGeral / totalGeral) * 100).toFixed(1) : 0;
+
+    // Atualiza a tela (Ano)
+    document.getElementById('labelAno').innerText = `Resumo de ${anoSelecionado}`;
+    document.getElementById('anoTotal').innerText = totalAno;
+    document.getElementById('anoGains').innerText = gainsAno;
+    document.getElementById('anoLoss').innerText = lossAno;
+    document.getElementById('anoTaxa').innerText = taxaAno + "%";
+
+    // Atualiza a tela (Total Geral)
+    document.getElementById('totalGeral').innerText = totalGeral;
+    document.getElementById('totalGains').innerText = gainsGeral;
+    document.getElementById('totalLoss').innerText = lossGeral;
+    document.getElementById('totalTaxa').innerText = taxaGeral + "%";
 }
 
 // Cor do input dinâmica
