@@ -214,6 +214,22 @@ input[type="text"].dinheiro-negativo { color: #ff5555; }
     flex: 1; /* Faz os cards crescerem por igual */
 }
 
+#modalValor {
+    outline: none; /* Remove aquela borda azul ao clicar */
+    transition: color 0.3s ease; /* Faz a cor mudar suavemente */
+}
+
+.btn-report {
+    background: #455a64; /* Cor de arquivo/documento */
+    color: white;
+    border: 1px solid #546e7a;
+    font-weight: bold;
+}
+
+.btn-report:hover {
+    background: #546e7a;
+}
+
 @media (max-width: 600px) {
     .year-container {
         grid-template-columns: 1fr;

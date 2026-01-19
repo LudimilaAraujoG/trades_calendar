@@ -145,9 +145,26 @@ function removerTooltip() {
 // --- FUNÇÕES DE MODAL E SALVAMENTO ---
 function abrirModalReplay(dataID, replay) {
     dataSelecionada = dataID;
+    const inputValor = document.getElementById('modalValor');
+    
     document.getElementById('modalTitle').innerText = dataID.split('-').reverse().join('/');
     document.getElementById('modalObs').value = replay ? replay.obs : "";
-    document.getElementById('modalValor').value = replay ? replay.valor : "";
+    
+    // Se tiver replay, formata o valor para o padrão BR (1.500,50)
+    if (replay) {
+        inputValor.value = parseFloat(replay.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    } else {
+        inputValor.value = "";
+    }
+    
+    // FORÇAR A COR AO ABRIR:
+    const v = replay ? parseFloat(replay.valor) : 0;
+    if (inputValor.value.includes('-') || v < 0) {
+        inputValor.style.color = "#ff5555"; // Vermelho
+    } else {
+        inputValor.style.color = "#00ff00"; // Verde
+    }
+
     document.getElementById('btnExcluir').style.display = replay ? "block" : "none";
     document.getElementById('modalReplay').style.display = 'flex';
 }
@@ -164,9 +181,14 @@ async function confirmarSalvar() {
     let valorLimpo = String(valorRaw).replace(/\./g, '').replace(',', '.');
     let valorFinal = parseFloat(valorLimpo) || 0;
 
-    const { error } = await _supabase.from('replays').upsert([
-        { data: dataSelecionada, ativo: ativo, obs: obs, valor: valorFinal }
-    ], { onConflict: 'data, ativo' });
+   const { error } = await _supabase.from('replays').upsert([
+    { 
+        data: dataSelecionada, 
+        ativo: ativo, 
+        obs: obs, 
+        valor: valorFinal 
+    }
+], { onConflict: 'data, ativo' }); // <--- ESSA LINHA É FUNDAMENTAL
 
     if (error) alert("Erro: " + error.message);
     else { fecharModais(); carregarTudo(); }
@@ -229,6 +251,67 @@ function atualizarEstatisticas() {
     document.getElementById('totalGains').innerText = gainsGeral;
     document.getElementById('totalLoss').innerText = lossGeral;
     document.getElementById('totalTaxa').innerText = taxaGeral + "%";
+}
+
+function exportarRelatorio() {
+    const ativo = document.getElementById('selectAtivo').value;
+    
+    // 1. Filtra TODOS os replays do ativo (independente do ano)
+    // 2. Ordena por data (o .sort garante que venha 2024, 2025, 2026...)
+    const dados = dataSalva
+        .filter(r => r.ativo === ativo)
+        .sort((a, b) => new Date(a.data) - new Date(b.data));
+
+    if (dados.length === 0) {
+        alert("Não há dados para exportar deste ativo.");
+        return;
+    }
+
+    // Monta o cabeçalho do arquivo
+    let texto = `===========================================\n`;
+    texto += `   DIÁRIO DE TRADE - HISTÓRICO COMPLETO    \n`;
+    texto += `   ATIVO: ${ativo}                         \n`;
+    texto += `===========================================\n\n`;
+
+    let anoAtual = "";
+
+    dados.forEach(r => {
+        const anoDoReplay = r.data.split('-')[0];
+        
+        // Se mudou o ano, coloca um cabeçalho de ano para organizar
+        if (anoDoReplay !== anoAtual) {
+            anoAtual = anoDoReplay;
+            texto += `\n--- ANO ${anoAtual} ---\n`;
+        }
+
+        const dataFormatada = r.data.split('-').reverse().join('/');
+        const valorFormatado = parseFloat(r.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        const emoji = parseFloat(r.valor) > 0 ? '✅' : parseFloat(r.valor) < 0 ? '❌' : '⚖️';
+
+        texto += `[${dataFormatada}] ${valorFormatado} ${emoji}\n`;
+        if (r.obs) {
+            texto += `Nota: ${r.obs}\n`;
+        }
+        texto += `-------------------------------------------\n`;
+    });
+
+    // Cálculos de Performance Total
+    const totalGeral = dados.length;
+    const gains = dados.filter(r => parseFloat(r.valor) > 0).length;
+    const taxa = ((gains / totalGeral) * 100).toFixed(1);
+
+    texto += `\n\n===========================================\n`;
+    texto += `RESUMO HISTÓRICO FINAL:\n`;
+    texto += `Total de Replays realizados: ${totalGeral}\n`;
+    texto += `Taxa de Assertividade Geral: ${taxa}%\n`;
+    texto += `===========================================`;
+
+    // Download do arquivo
+    const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Historico_Completo_${ativo}.txt`;
+    link.click();
 }
 
 // Cor do input dinâmica
