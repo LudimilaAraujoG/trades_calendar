@@ -18,9 +18,20 @@ selAtivo.onchange = renderizarAno;
 
 async function carregarTudo() {
     document.getElementById('status').innerText = "Sincronizando...";
+    
+    // 1. Salva o ativo selecionado no momento antes de limpar a lista
+    const ativoAtual = selAtivo.value;
+
     const { data: ativos } = await _supabase.from('ativos_cadastrados').select('nome');
     selAtivo.innerHTML = "";
-    if (ativos) ativos.forEach(a => selAtivo.innerHTML += `<option value="${a.nome}">${a.nome}</option>`);
+    if (ativos) {
+        ativos.forEach(a => selAtivo.innerHTML += `<option value="${a.nome}">${a.nome}</option>`);
+    }
+
+    // 2. Se o ativo salvo anteriormente ainda existir na lista, restaura a seleção
+    if (ativoAtual && [...selAtivo.options].some(opt => opt.value === ativoAtual)) {
+        selAtivo.value = ativoAtual;
+    }
 
     const { data: replays } = await _supabase.from('replays').select('*');
     dataSalva = replays || [];
